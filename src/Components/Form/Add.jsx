@@ -37,8 +37,14 @@ export default function Add() {
         const file = e.target.files[0];
         if (file) {
             const preview = URL.createObjectURL(file);
-            setImage(preview);
             setImagePreview(preview);
+            
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                // reader.result chứa chuỗi Base64 của ảnh
+                setImage(reader.result);
+            };
+            reader.readAsDataURL(file);
         }
     };
 
@@ -58,7 +64,7 @@ export default function Add() {
         setProducts(updatedProducts);
         localStorage.setItem("products", JSON.stringify(updatedProducts));
 
-        
+        // Reset form
         setName('');
         setNameCategory('Thời trang nam');
         setCode('');
@@ -109,7 +115,7 @@ export default function Add() {
                                     </div>
                                     <div className='form-group mb-3'>
                                         <label htmlFor='image'>Hình ảnh</label>
-                                        <input type='file' className='form-control' id="image" name='image' onChange={handleImageChange} />
+                                        <input type='file' className='form-control' id="image" name='image' accept="image/*" onChange={handleImageChange} />
                                         {imagePreview && (
                                             <div className="mt-2">
                                                 <p>Xem trước:</p>
